@@ -6,7 +6,7 @@ export function EmailToVaultDemo() {
   const tileDelays = useMemo(() => [0, 150, 300], [])
 
   return (
-    <div className="rounded-[calc(var(--radius)*1.5)] border border-border bg-card p-6 shadow-sm relative overflow-hidden">
+    <div className="rounded-[calc(var(--radius)*1.5)] border border-border bg-card p-6 shadow-sm relative overflow-hidden hover:shadow-md transition-shadow">
       {/* Glow sweep */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px overflow-hidden">
         <div className="h-px w-1/3 bg-gradient-to-r from-transparent via-primary to-transparent animate-[glow-sweep_2.4s_linear_infinite]" />

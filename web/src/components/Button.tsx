@@ -9,7 +9,7 @@ export interface ButtonProps extends PropsWithChildren, ButtonHTMLAttributes<HTM
 
 export function Button({ children, className, variant = 'primary', ...rest }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center gap-2 rounded-[var(--radius)] px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none'
+    'inline-flex items-center justify-center gap-2 rounded-[var(--radius)] px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none will-change-transform hover:scale-[1.01] active:scale-[0.99]'
 
   const variants: Record<ButtonVariant, string> = {
     primary: 'bg-primary text-primary-foreground hover:opacity-90',
