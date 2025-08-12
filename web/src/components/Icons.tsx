@@ -97,4 +97,52 @@ export function GitHubIcon(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
+export function LockIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+      <rect x="4" y="10" width="16" height="10" rx="2" className="fill-card stroke-border" />
+      <path d="M8 10V8a4 4 0 118 0v2" className="stroke-primary" />
+      <circle cx="12" cy="15" r="1.5" className="fill-primary/20 stroke-primary" />
+    </svg>
+  )
+}
+
+export function TagIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+      <path d="M3 12l9-9h6l3 3v6l-9 9L3 12z" className="fill-card stroke-border" />
+      <circle cx="16" cy="8" r="1.5" className="fill-primary/30 stroke-primary" />
+    </svg>
+  )
+}
+
+export function CalculatorIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+      <rect x="5" y="3" width="14" height="18" rx="2" className="fill-card stroke-border" />
+      <rect x="7.5" y="6" width="9" height="3" className="fill-primary/20 stroke-primary" />
+      <path d="M8 12h2M12 12h2M16 12h0M8 15h2M12 15h2M16 15h0M8 18h2M12 18h2M16 18h0" />
+    </svg>
+  )
+}
+
+export function ReceiptIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+      <path d="M6 3l1.5 1.5L9 3l1.5 1.5L12 3l1.5 1.5L15 3l1.5 1.5L18 3v18l-1.5-1.5L15 21l-1.5-1.5L12 21l-1.5-1.5L9 21l-1.5-1.5L6 21V3z" className="fill-card stroke-border" />
+      <path d="M8 8h8M8 12h8M8 16h6" className="stroke-primary" />
+    </svg>
+  )
+}
+
+export function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+      <rect x="3" y="5" width="18" height="16" rx="2" className="fill-card stroke-border" />
+      <path d="M8 3v4M16 3v4M3 9h18" className="stroke-primary" />
+      <rect x="7" y="12" width="4" height="3" className="fill-primary/20 stroke-primary" />
+    </svg>
+  )
+}
+
 

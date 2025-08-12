@@ -2,7 +2,7 @@
 
 :root {
   --radius: 0.65rem;
-  --background: oklch(1 0 0);
+  --background: hsl(60 9.1% 97.8%);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
@@ -35,6 +35,44 @@
   --sidebar-ring: oklch(0.705 0.213 47.604);
 }
 
+/* Vercel Geist – same font family used on nextjs.org */
+@font-face {
+  font-family: "Geist";
+  src: url("https://github.com/vercel/geist-font/releases/download/1.3.0/GeistVF.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("https://github.com/vercel/geist-font/releases/download/1.3.0/GeistMonoVF.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: hsl(20.5 90.2% 48.2%);
+  --primary-foreground: oklch(0.98 0.016 73.684);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--primary);
+}
+
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -64,6 +102,55 @@ html, body, #root {
 /* Smooth scroll behavior for in-page anchors */
 html { scroll-behavior: smooth; }
 
+@layer base {
+  /* Global theme tokens applied */
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Geist", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  }
+  /* Respect iOS safe areas */
+  body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+  code, kbd, pre, samp {
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  /* Consistent focus outline */
+  :focus-visible { outline: none; }
+}
+
+@layer utilities {
+  /* Subtle, consistent hover + focus treatment */
+  .interactive {
+    @apply motion-safe:transition motion-safe:duration-200 motion-safe:ease-out motion-safe:transform focus-visible:ring-2 focus-visible:ring-ring;
+  }
+  .interactive-elevate {
+    @apply motion-safe:transition motion-safe:duration-200 motion-safe:ease-out motion-safe:transform focus-visible:ring-2 focus-visible:ring-ring hover:-translate-y-0.5 hover:shadow-md active:translate-y-0;
+  }
+  .glass {
+    @apply bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border border-border;
+  }
+  .subtle-separator {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-border to-transparent;
+  }
+  /* Mobile native feel */
+  .touch-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+  .card-tappable {
+    @apply active:scale-[0.99] transition-transform; touch-action: manipulation;
+  }
+  .interactive-glow {
+    @apply motion-safe:transition motion-safe:duration-200 motion-safe:ease-out ring-0 hover:ring-2 hover:ring-primary/40 hover:shadow-lg;
+  }
+  .interactive-scale {
+    @apply motion-safe:transition motion-safe:duration-200 motion-safe:ease-out hover:scale-[1.02] active:scale-[0.99];
+  }
+  /* Tooltip helper (kept for future use; not used on pipeline now) */
+  .tooltip {
+    @apply pointer-events-none absolute z-10 -translate-y-2 rounded-md bg-popover px-2 py-1 text-xs text-popover-foreground shadow border border-border opacity-0 transition-opacity duration-150 ease-out;
+  }
+}
+
 /* Demo animations */
 @keyframes tile-move {
   0% { transform: translateX(0) translateY(0) scale(0.98); opacity: 0; }
@@ -80,4 +167,30 @@ html { scroll-behavior: smooth; }
 @keyframes live-pulse {
   0%, 100% { opacity: 0.4; transform: scale(0.95); }
   50% { opacity: 1; transform: scale(1); }
+}
+
+/* Pipeline animation */
+@keyframes pipeline-slide {
+  0% { transform: translateX(-8px); opacity: 0.6; }
+  40% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+/* Card flip */
+.flip-card {
+  perspective: 1000px;
+}
+.flip-card-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 500ms var(--ease, cubic-bezier(0.2, 0.8, 0.2, 1));
+}
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.flip-front, .flip-back {
+  backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
 }

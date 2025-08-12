@@ -1,0 +1,15 @@
+{
+  "name": "extractees",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Monorepo shell for Extractees web app",
+  "scripts": {
+    "dev": "cd web && npm run dev",
+    "build": "cd web && npm run build",
+    "lint": "cd web && npm run lint",
+    "typecheck": "cd web && npm run typecheck",
+    "preview": "cd web && npm run preview",
+    "install-all": "cd web && npm install"
+  },
+  "engines": { "node": ">=18" }
+}
