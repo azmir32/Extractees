@@ -1,5 +1,6 @@
 import { type Icon } from "@tabler/icons-react"
 import { useRouterState } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 
 import {
   SidebarGroup,
@@ -27,11 +28,11 @@ export function NavMain({
             const isActive = pathname === item.url || pathname.startsWith(item.url + '/')
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild tooltip={item.title} isActive={isActive}>
-                  <a href={item.url}>
+              <SidebarMenuButton asChild tooltip={item.title} isActive={isActive}>
+                  <Link to={item.url}>
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             )
