@@ -1,0 +1,16 @@
+[build]
+# Run the build from the web app folder
+base = "web"
+command = "npm run build"
+# Publish the built assets
+publish = "dist"
+
+[build.environment]
+NODE_VERSION = "18"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+
