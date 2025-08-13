@@ -7,6 +7,7 @@ import { PanelLeftIcon } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
+import { useUser } from "@clerk/clerk-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
@@ -66,12 +67,28 @@ function SidebarProvider({
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) {
+  const { user } = useUser?.() ?? { user: undefined }
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = React.useState(defaultOpen)
+  const readStoredOpen = React.useCallback(() => {
+    try {
+      const baseKey = SIDEBAR_COOKIE_NAME
+      const uid = (user as any)?.id as string | undefined
+      const storageKey = uid ? `${baseKey}:${uid}` : baseKey
+      const ls = typeof window !== 'undefined' ? window.localStorage?.getItem(storageKey) : null
+      if (ls === 'true' || ls === 'false') return ls === 'true'
+      if (typeof document !== 'undefined') {
+        const match = document.cookie.match(new RegExp(`${baseKey}=([^;]+)`))
+        if (match) return match[1] === 'true'
+      }
+    } catch {}
+    return defaultOpen
+  }, [defaultOpen, user])
+
+  const [_open, _setOpen] = React.useState(readStoredOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
@@ -83,9 +100,17 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+      try {
+        const baseKey = SIDEBAR_COOKIE_NAME
+        const uid = (user as any)?.id as string | undefined
+        const storageKey = uid ? `${baseKey}:${uid}` : baseKey
+        if (typeof window !== 'undefined') {
+          window.localStorage?.setItem(storageKey, String(openState))
+        }
+        document.cookie = `${baseKey}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+      } catch {}
     },
-    [setOpenProp, open]
+    [setOpenProp, open, user]
   )
 
   // Helper to toggle the sidebar.
@@ -112,6 +137,12 @@ function SidebarProvider({
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed"
+
+  // Re-read stored state when the user identity changes (per-user persistence).
+  React.useEffect(() => {
+    const stored = readStoredOpen()
+    _setOpen(stored)
+  }, [readStoredOpen])
 
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
@@ -261,21 +292,28 @@ function SidebarTrigger({
   const { toggleSidebar } = useSidebar()
 
   return (
-    <Button
-      data-sidebar="trigger"
-      data-slot="sidebar-trigger"
-      variant="ghost"
-      size="icon"
-      className={cn("size-7", className)}
-      onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-        onClick?.(event)
-        toggleSidebar()
-      }}
-      {...props}
-    >
-      <PanelLeftIcon />
-      <span className="sr-only">Toggle Sidebar</span>
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          data-sidebar="trigger"
+          data-slot="sidebar-trigger"
+          variant="ghost"
+          size="icon"
+          aria-label="Toggle sidebar (Cmd/Ctrl+B)"
+          title="Toggle sidebar (Cmd/Ctrl+B)"
+          className={cn("size-7", className)}
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            onClick?.(event)
+            toggleSidebar()
+          }}
+          {...props}
+        >
+          <PanelLeftIcon />
+          <span className="sr-only">Toggle Sidebar</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">Toggle sidebar (Cmd/Ctrl+B)</TooltipContent>
+    </Tooltip>
   )
 }
 
