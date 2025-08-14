@@ -5,14 +5,16 @@ import { Button } from '@/components/ui/button'
 import { IconUpload } from '@tabler/icons-react'
 
 type Props = {
-  value: { q: string; status: string }
-  onChange: (v: { q: string; status: string }) => void
+  value: { q: string; status: string; from?: string; to?: string; vendorId?: string; categoryId?: string; tags?: string }
+  onChange: (v: { q: string; status: string; from?: string; to?: string; vendorId?: string; categoryId?: string; tags?: string }) => void
   onUploadClick: () => void
+  vendors?: Array<{ id: string; name: string }>
+  categories?: Array<{ id: string; name: string }>
 }
 
-export function VaultToolbar({ value, onChange, onUploadClick }: Props) {
+export function VaultToolbar({ value, onChange, onUploadClick, vendors = [], categories = [] }: Props) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+    <div className="flex flex-col gap-3">
       <div className="flex-1">
         <Input
           placeholder="Search invoices, vendors, amounts…"
@@ -20,7 +22,7 @@ export function VaultToolbar({ value, onChange, onUploadClick }: Props) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...value, q: e.target.value })}
         />
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-[160px_auto] gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         <Select value={value.status} onValueChange={(v) => onChange({ ...value, status: v })}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All statuses" />
@@ -33,6 +35,31 @@ export function VaultToolbar({ value, onChange, onUploadClick }: Props) {
             <SelectItem value="saved">Saved</SelectItem>
           </SelectContent>
         </Select>
+        <Input type="date" value={value.from ?? ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...value, from: e.target.value })} />
+        <Input type="date" value={value.to ?? ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...value, to: e.target.value })} />
+        <Select value={value.vendorId ?? ''} onValueChange={(v) => onChange({ ...value, vendorId: v || undefined })}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="All vendors" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All vendors</SelectItem>
+            {vendors.map((v) => (
+              <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={value.categoryId ?? ''} onValueChange={(v) => onChange({ ...value, categoryId: v || undefined })}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="All categories" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All categories</SelectItem>
+            {categories.map((c) => (
+              <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Input placeholder="tags e.g. travel, food" value={value.tags ?? ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...value, tags: e.target.value })} />
         <Button onClick={onUploadClick} className="interactive-elevate">
           <IconUpload className="size-4" />
           Upload
