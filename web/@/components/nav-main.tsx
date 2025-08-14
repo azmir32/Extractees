@@ -29,7 +29,7 @@ export function NavMain({
             return (
               <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title} isActive={isActive}>
-                  <Link to={item.url}>
+                  <Link to={item.url} preload="intent" preloadDelay={100}>
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                   </Link>
