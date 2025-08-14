@@ -37,23 +37,23 @@ export function VaultToolbar({ value, onChange, onUploadClick, vendors = [], cat
         </Select>
         <Input type="date" value={value.from ?? ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...value, from: e.target.value })} />
         <Input type="date" value={value.to ?? ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...value, to: e.target.value })} />
-        <Select value={value.vendorId ?? ''} onValueChange={(v) => onChange({ ...value, vendorId: v || undefined })}>
+        <Select value={value.vendorId ?? 'all'} onValueChange={(v) => onChange({ ...value, vendorId: v === 'all' ? undefined : v })}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All vendors" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All vendors</SelectItem>
+            <SelectItem value="all">All vendors</SelectItem>
             {vendors.map((v) => (
               <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <Select value={value.categoryId ?? ''} onValueChange={(v) => onChange({ ...value, categoryId: v || undefined })}>
+        <Select value={value.categoryId ?? 'all'} onValueChange={(v) => onChange({ ...value, categoryId: v === 'all' ? undefined : v })}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All categories</SelectItem>
+            <SelectItem value="all">All categories</SelectItem>
             {categories.map((c) => (
               <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
             ))}
