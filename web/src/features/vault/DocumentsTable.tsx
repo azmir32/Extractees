@@ -47,6 +47,8 @@ export function DocumentsTable({ documents, onOpen, loading }: Props) {
             <tr
               key={d.id}
               className={cn('border-t border-border hover:bg-muted/40 cursor-pointer')}
+              onMouseEnter={() => {/* prefetch hook placeholder */}}
+              onFocus={() => {/* prefetch hook placeholder */}}
               onClick={() => onOpen(d)}
             >
               <td className="px-4 py-3">{d.filename}</td>
